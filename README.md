@@ -1,6 +1,6 @@
 # Tiêu đề dự án
 
-Mô tả ngắn gọn về dự án của bạn.
+Website thương hiệu thời trang.
 
 ## Công nghệ được sử dụng
 
