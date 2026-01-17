@@ -14,7 +14,7 @@ export const requestRegister = async (data) => {
 };
 
 export const requestLogout = async () => {
-    const res = await apiClient.get(`${apiUser}/logout`);
+    const res = await request.get(`${apiUser}/logout`);
     return res.data;
 };
 
