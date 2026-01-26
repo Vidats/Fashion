@@ -49,3 +49,5 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
     console.log(`🚀 Server running at http://localhost:${port}`);
 });
+console.log('ENV FILE LOADED');
+console.log('MONGO_URI =', process.env.MONGO_URI);

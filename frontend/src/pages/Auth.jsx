@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { requestLogin, requestRegister } from '../config/UserRequest';
-import { saveAuth } from '../utils/auth';
 import ForgotPassword from './ForgotPassword'; // Bạn tạo file này từ code tôi đưa ở trên
+import { useAuth } from '../config/AuthContext';
 
 export default function Auth() {
     const [mode, setMode] = useState('login'); // 'login', 'register', 'forgot'
@@ -13,6 +13,7 @@ export default function Auth() {
     });
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -25,7 +26,7 @@ export default function Auth() {
         try {
             if (mode === 'login') {
                 const res = await requestLogin({ email: form.email, password: form.password });
-                saveAuth(res.metadata);
+                login(res.metadata);
                 navigate('/');
             } else if (mode === 'register') {
                 await requestRegister(form);

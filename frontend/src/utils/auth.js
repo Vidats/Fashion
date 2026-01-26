@@ -5,9 +5,13 @@ const LOGGED_KEY = 'logged';
 
 // Lưu khi đăng nhập thành công
 export const saveAuth = (metadata) => {
-    if (metadata.user) {
+    // metadata ở đây chính là object to đùng bạn vừa gửi (có user, accessToken...)
+    if (metadata && metadata.user) {
+        // Chỉ lưu thông tin user (có fullName, email, isAdmin...) vào LocalStorage
         localStorage.setItem(USER_KEY, JSON.stringify(metadata.user));
     }
+
+    // Cookie dùng để đánh dấu trạng thái login cho Axios
     Cookies.set(LOGGED_KEY, '1', { expires: 7 });
 };
 

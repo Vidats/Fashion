@@ -234,6 +234,40 @@ class UserController {
             next(error); // Chuyển lỗi về Error Middleware xử lý
         }
     }
+
+    async getAllUsers(req, res) {
+        const users = await UserModel.find().select('-password');
+        return new OK({
+            message: 'Lấy danh sách người dùng thành công',
+            metadata: users,
+        }).send(res);
+    }
+    async refreshToken(req, res) {
+        const refreshToken = req.cookies.refreshToken;
+        if (!refreshToken) {
+            throw new AuthFailureError('Vui lòng đăng nhập lại');
+        }
+
+        const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET_REFRESH);
+        const findUser = await UserModel.findById(decoded.id);
+        if (!findUser) {
+            throw new NotFoundError('Người dùng không tồn tại');
+        }
+
+        const newAccessToken = createAccessToken({ id: findUser._id });
+        const newRefreshToken = createRefreshToken({ id: findUser._id });
+
+        setCookie(res, newAccessToken, newRefreshToken);
+
+        return new OK({
+            message: 'Làm mới token thành công',
+            metadata: {
+                user: findUser,
+                accessToken: newAccessToken,
+                refreshToken: newRefreshToken,
+            },
+        }).send(res);
+    }
 }
 
 module.exports = new UserController();

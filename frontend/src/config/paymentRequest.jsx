@@ -29,3 +29,9 @@ export const requestGetPaymentDetail = async (orderId) => {
     const res = await apiClient.get(`${apiPayment}/order/${orderId}`); // Khớp với router.get('/order/:orderId')
     return res.data;
 };
+
+// 5. Lấy lịch sử đơn hàng của User
+export const requestGetPaymentsByUser = async () => {
+    const res = await apiClient.get(`${apiPayment}/history`); // Khớp với router.get('/history')
+    return res.data;
+};

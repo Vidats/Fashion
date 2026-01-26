@@ -38,3 +38,8 @@ export const requestVerifyForgotPassword = async (data) => {
     const res = await request.post(`${apiUser}/verify-forgot-password`, data);
     return res.data;
 };
+
+export const listUsers = async () => {
+    const res = await request.get(`${apiUser}/list`);
+    return res.data;
+};

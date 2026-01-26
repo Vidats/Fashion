@@ -21,8 +21,20 @@ export default function AdminLayout() {
                     <Link to="/admin/products" className="block px-4 py-2 hover:bg-slate-800 rounded">
                         📦 Sản phẩm
                     </Link>
+                    <Link to="/admin/categories" className="block px-4 py-2 hover:bg-slate-800 rounded">
+                        📚 Danh mục
+                    </Link>
                     <Link to="/admin/orders" className="block px-4 py-2 hover:bg-slate-800 rounded">
                         📑 Đơn hàng
+                    </Link>
+                    <Link to="/admin/coupons" className="block px-4 py-2 hover:bg-slate-800 rounded">
+                        🎟️ Mã giảm giá
+                    </Link>
+                    <Link to="/admin/users" className="block px-4 py-2 hover:bg-slate-800 rounded">
+                        👥 Khách hàng
+                    </Link>
+                    <Link to="/admin/feedbacks" className="block px-4 py-2 hover:bg-slate-800 rounded">
+                        💬 Đánh giá
                     </Link>
                     <Link to="/" className="block px-4 py-2 hover:bg-slate-800 rounded border-t border-slate-800 pt-4">
                         🏠 Về trang Shop

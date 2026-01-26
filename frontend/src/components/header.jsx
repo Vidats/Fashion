@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { getUser, logout } from '../utils/auth';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../config/AuthContext';
 import { requestGetCart } from '../config/CartRequest';
+
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [cartCount, setCartCount] = useState(0); // State lưu số lượng sản phẩm
-    const user = getUser();
+    const [cartCount, setCartCount] = useState(0);
+    const { user, logout } = useAuth(); // Sử dụng hook
+    const navigate = useNavigate();
 
-    // Hàm lấy dữ liệu giỏ hàng từ Server
     const fetchCartData = async () => {
         if (!user) {
             setCartCount(0);
@@ -16,7 +17,6 @@ export default function Header() {
         try {
             const res = await requestGetCart();
             if (res.metadata && res.metadata.cart) {
-                // Tính tổng số lượng (quantity) của tất cả sản phẩm trong giỏ
                 const totalTypes = res.metadata.cart.products.length;
                 setCartCount(totalTypes);
             }
@@ -27,21 +27,17 @@ export default function Header() {
     };
 
     useEffect(() => {
-        // Lấy dữ liệu lần đầu khi component mount
         fetchCartData();
-
-        // Lắng nghe sự kiện 'cartUpdated' để cập nhật số lượng ngay lập tức
-        // Sự kiện này sẽ được dispatch từ trang ProductDetail khi thêm thành công
         window.addEventListener('cartUpdated', fetchCartData);
 
         return () => {
             window.removeEventListener('cartUpdated', fetchCartData);
         };
-    }, [user]);
+    }, [user]); // user là dependency, khi user thay đổi (đăng nhập/xuất), sẽ fetch lại giỏ hàng
 
     const handleLogout = () => {
-        logout();
-        window.location.href = '/auth';
+        logout(); // Gọi hàm logout từ context
+        navigate('/auth'); // Điều hướng về trang đăng nhập
     };
 
     return (
@@ -82,6 +78,13 @@ export default function Header() {
                                 </span>
                             )}
                         </Link>
+
+                        {/* Order History Link */}
+                        {user && (
+                             <Link to="/orders" className="p-2 text-gray-700 hover:text-blue-600">
+                                <span className="text-xl">🧾</span>
+                            </Link>
+                        )}
 
                         {/* USER / LOGIN */}
                         {user ? (

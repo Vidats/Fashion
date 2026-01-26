@@ -12,9 +12,19 @@ export const requestCreateFeedback = (formData) => {
     });
 };
 
+/**
+ * Lấy 4 đánh giá mới nhất cho trang chủ
+ */
 export const requestGetAllFeedbacks = () => {
     // Đảm bảo đường dẫn này khớp 100% với file routes/index.js của bạn
     return apiClient.get('/feedback/get');
+};
+
+/**
+ * Lấy tất cả các đánh giá cho trang Admin
+ */
+export const requestGetAllFeedbacksForAdmin = () => {
+    return apiClient.get('/feedback/get-all');
 };
 
 /**

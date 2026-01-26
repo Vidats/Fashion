@@ -306,6 +306,20 @@ class PaymentController {
             metadata: findPayment,
         }).send(res);
     }
+
+    async getPaymentsByUser(req, res) {
+        const userId = req.user;
+        const payments = await paymentModel
+            .find({ userId })
+            .populate('products.productId', 'nameProduct imagesProduct')
+            .populate('couponId')
+            .sort({ createdAt: -1 });
+
+        return new OK({
+            message: 'Lấy lịch sử đơn hàng thành công',
+            metadata: payments,
+        }).send(res);
+    }
 }
 
 module.exports = new PaymentController();

@@ -12,6 +12,11 @@ class FeedbackController {
         const { paymentId, content, rating, productId } = req.body;
         const dataImages = req.files;
         const findPayment = await paymentModel.findById(paymentId);
+        // Kiểm tra xem người dùng đã đánh giá sản phẩm này chưa
+        const existingFeedback = await feedbackModel.findOne({ userId: id, productId });
+        if (existingFeedback) {
+            throw new BadRequestError('Bạn đã đánh giá sản phẩm này rồi.');
+        }
 
         if (!findPayment) {
             throw new NotFoundError('Đơn hàng không tồn tại');
@@ -49,8 +54,8 @@ class FeedbackController {
     async getAllFeedback(req, res) {
         const feedbacks = await feedbackModel
             .find()
-            .populate('userId', 'name avatar') // Hiện tên người đánh giá
-            .populate('productId', 'nameProduct thumb') // Hiện tên sản phẩm họ đã mua
+            .populate('userId', 'fullName avatar') // Hiện tên người đánh giá
+            .populate('productId', 'nameProduct imagesProduct') // Hiện tên sản phẩm họ đã mua
             .sort({ createdAt: -1 }); // Mới nhất hiện lên đầu
 
         return new OK({
@@ -58,14 +63,27 @@ class FeedbackController {
             metadata: feedbacks,
         }).send(res);
     }
+    // Trong feedback.controller.js
+    async getLatestFeedback(req, res) {
+        const feedbacks = await feedbackModel
+            .find()
+            .populate('userId', 'fullName avatar') // Hiện tên người đánh giá
+            .populate('productId', 'nameProduct imagesProduct') // Hiện tên sản phẩm họ đã mua
+            .sort({ createdAt: -1 }) // Mới nhất hiện lên đầu
+            .limit(4); // Giới hạn 4 feeback
+
+        return new OK({
+            message: 'Lấy 4 đánh giá mới nhất thành công',
+            metadata: feedbacks,
+        }).send(res);
+    }
+
     // Lấy feedback của riêng từng User
     async getFeedbackInUser(req, res) {
         const userId = req.user; // Lấy từ middleware authUser
-        const feedbacks = await feedbackModel
-            .find({ userId })
-            .populate('productId', 'name thumb')
-            .sort({ createdAt: -1 });
-        return new OK({ message: 'Thành công', metadata: feedbacks }).send(res);
+        const feedbacks = await feedbackModel.find({ userId }).select('productId').lean();
+        const reviewedProductIds = feedbacks.map((fb) => fb.productId.toString());
+        return new OK({ message: 'Thành công', metadata: reviewedProductIds }).send(res);
     }
 
     // Xóa feedback
