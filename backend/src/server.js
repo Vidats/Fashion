@@ -1,5 +1,6 @@
-const express = require('express');
 require('dotenv').config();
+
+const express = require('express');
 const cookieParser = require('cookie-parser');
 
 const connectDB = require('./config/connectDB');
@@ -47,7 +48,7 @@ app.use((err, req, res, next) => {
 
 /* ===== Start Server ===== */
 app.listen(port, () => {
-    console.log(`🚀 Server running at http://localhost:${port}`);
+    console.log(`🚀 Server đang chạy tại cổng: ${port}`);
 });
 console.log('ENV FILE LOADED');
 console.log('MONGO_URI =', process.env.MONGO_URI);
