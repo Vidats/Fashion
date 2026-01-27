@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { requestGetPaymentsAdmin, requestGetPaymentDetail, requestUpdateStatus } from '../config/PaymentRequest';
+import { requestGetPaymentsAdmin, requestGetPaymentDetail, requestUpdateStatus } from '../config/paymentRequest';
 import { Eye, Package, X, Calendar, User, MapPin, CreditCard, Clock } from 'lucide-react';
 
 export default function AdminOrders() {
